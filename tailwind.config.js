@@ -16,6 +16,7 @@ module.exports = {
         "bnb-red": "#FF385C",
         "bnb-border": "#EBEBEB",
         "bnb-soft-gray": "#717171",
+        "bnb-hover": "#F7F7F7",
       },
     },
   },

@@ -3,13 +3,13 @@ import Link from "next/link";
 import React from "react";
 interface MenuItemProps {
   label: string;
-  url: string;
+  onClick: ()=>void;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ label, url }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ label, onClick }) => {
   return (
-    <div className="w-full bg-white hover:bg-[#F7F7F7] px-4 py-2 text-black">
-      <Link href={url}>{label}</Link>
+    <div className="w-full bg-white hover:bg-bnb-hover px-4 py-2 text-black">
+      <button onClick={onClick}>{label}</button>
     </div>
   );
 };

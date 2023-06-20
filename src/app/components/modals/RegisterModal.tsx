@@ -15,6 +15,7 @@ const RegisterModal = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -28,7 +29,7 @@ const RegisterModal = () => {
     setIsLoading(true);
     axios
       .post("/api/register", data)
-      .then(() => registerModal.onOpen())
+      .then(() => registerModal.onClose())
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
   };
@@ -63,8 +64,8 @@ const RegisterModal = () => {
           register={register}
           errors={errors}
           required
-          label="Email"
-          id="Email"
+          label="email"
+          id="email"
           value={email}
           setValue={setEmail}
         />
@@ -74,8 +75,8 @@ const RegisterModal = () => {
           register={register}
           errors={errors}
           required
-          label="Name"
-          id="Name"
+          label="name"
+          id="name"
           value={name}
           setValue={setName}
         />
@@ -85,17 +86,15 @@ const RegisterModal = () => {
           register={register}
           errors={errors}
           required
-          label="Password"
-          id="Password"
+          label="password"
+          id="password"
           value={password}
           setValue={setPassword}
         />
 
         <Button
           color="red"
-          onClick={() => {
-            console.log("p");
-          }}
+          onClick={handleSubmit(onSubmit)}
         >
           Continue
         </Button>

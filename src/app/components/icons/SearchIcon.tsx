@@ -1,6 +1,7 @@
 "use client"
-import { IconProps } from "../../types/icon";
-
+interface IconProps{
+  style?: string;
+}
 const SearchIcon: React.FC<IconProps> = ({ style }) => {
   return (
     <svg

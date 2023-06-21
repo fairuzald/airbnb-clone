@@ -5,11 +5,11 @@ import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
-import { User } from "@prisma/client";
 import { signOut } from "next-auth/react";
 import { toast } from "react-hot-toast";
+import { SafeUser } from "@/app/types";
 interface UserMenuProps {
-  currentUser?: User | null;
+  currentUser?: SafeUser | null;
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
@@ -49,7 +49,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
         >
           <HamburgerIcon style="w-4 h-4 fill-bnb-soft-gray" />
 
-          <Avatar />
+          <Avatar image={currentUser?.image}/>
         </button>
         {isOpen && (
           <div className="flex flex-col py-2 absolute top-[60px] w-[40vw] md:w-[200px] shadow-md bg-white rounded-lg right-2 z-10">

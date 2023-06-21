@@ -4,17 +4,41 @@ import HamburgerIcon from "../icons/HamburgerIcon";
 import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
+import { User } from "@prisma/client";
+import { signOut } from "next-auth/react";
+import { toast } from "react-hot-toast";
+interface UserMenuProps {
+  currentUser?: User | null;
+}
 
-const UserMenu: React.FC = () => {
+const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
   const registerModal = useRegisterModal();
+  const loginModal = useLoginModal();
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
-  const dataMenu = [
-    { label: "Sign in", onClick: registerModal.onOpen },
-    { label: "Log in", onClick: registerModal.onOpen },
-  ];
+
+  const dataMenu = !currentUser
+    ? [
+        { label: "Sign in", onClick: registerModal.onOpen },
+        { label: "Log in", onClick: loginModal.onOpen },
+      ]
+    : [
+        { label: "My Trips", onClick: () => {} },
+        { label: "My Favorites", onClick: () => {} },
+        { label: "My Reservations", onClick: () => {} },
+        { label: "My Properties", onClick: () => {} },
+        { label: "Airbnb My Home", onClick: () => {} },
+        {
+          label: "Logout",
+          onClick: () => {
+            toast.success("Logged out");
+            signOut();
+          },
+        },
+      ];
   return (
     <>
       <div className="relative flex gap-4 bg-transparent w-auto items-center justify-center">
@@ -23,8 +47,8 @@ const UserMenu: React.FC = () => {
           onClick={toggleMenu}
           className="flex items-center justify-center border-bnb-border border shadow-sm hover:shadow-md transition rounded-full gap-3 px-[14px] py-1.5"
         >
-            <HamburgerIcon style="w-4 h-4 fill-bnb-soft-gray" />
- 
+          <HamburgerIcon style="w-4 h-4 fill-bnb-soft-gray" />
+
           <Avatar />
         </button>
         {isOpen && (

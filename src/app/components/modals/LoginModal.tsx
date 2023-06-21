@@ -1,22 +1,22 @@
 "use client";
 import React, { useCallback, useState } from "react";
+import { signIn } from "next-auth/react";
 import Modals from "./Modals";
 import CrossIcon from "../icons/CrossIcon";
 import TextFields from "../TextFields";
 import Button from "../Button";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import axios from "axios";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import GoogleIcon from "../icons/GoogleIcon";
-import { toast } from "react-hot-toast";
-
 import DiscordIcon from "../icons/DiscordIcon";
-const RegisterModal = () => {
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+const LoginModal = () => {
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -29,22 +29,25 @@ const RegisterModal = () => {
   const loginModal = useLoginModal();
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
-    axios
-      .post("/api/register", data)
-      .then(() => {
-        registerModal.onClose();
-        toast.success("Your data was registered");
-      })
-      .catch((err) => toast.error("Failed register your data"))
-      .finally(() => setIsLoading(false));
+    signIn("credentials", { ...data, redirect: false }).then((callback) => {
+      setIsLoading(false);
+      if (callback?.ok) {
+        router.refresh();
+        toast.success("Logged in");
+        loginModal.onClose();
+      }
+      if (callback?.error) {
+        toast.error("Failed to login");
+      }
+    });
   };
   const onToggle = useCallback(() => {
-    registerModal.onClose();
-    loginModal.onOpen();
+    loginModal.onClose();
+    registerModal.onOpen();
   }, [registerModal, loginModal]);
   const onClose = useCallback(() => {
-    registerModal.onClose();
-  }, [registerModal]);
+    loginModal.onClose();
+  }, [loginModal]);
   const header = (
     <div className="flex w-full items-center px-5 border-b border-b-bnb-border pb-3">
       <button
@@ -61,8 +64,8 @@ const RegisterModal = () => {
   const body = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-3">
-        <h4 className="text-xl font-semibold text-black">Welcome to Airbnb</h4>
-        <p className="text-bnb-soft-gray"> Create an account</p>
+        <h4 className="text-xl font-semibold text-black">Welcome Back</h4>
+        <p className="text-bnb-soft-gray">Login into your account</p>
         <TextFields
           type="text"
           disabled={isLoading}
@@ -73,17 +76,6 @@ const RegisterModal = () => {
           id="email"
           value={email}
           setValue={setEmail}
-        />
-        <TextFields
-          type="text"
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-          label="Name"
-          id="name"
-          value={name}
-          setValue={setName}
         />
         <TextFields
           type="password"
@@ -124,16 +116,16 @@ const RegisterModal = () => {
   );
   const footer = (
     <div className="flex gap-2 w-full text-black justify-center">
-      <p>Already have an account?</p>
+      <p>Don&apos;t have any account yet?</p>
       <button onClick={onToggle}>
-        <p className="font-bold hover:underline">Log In</p>
+        <p className="font-bold hover:underline">Register</p>
       </button>
     </div>
   );
 
   return (
     <Modals
-      isOpen={registerModal.isOpen}
+      isOpen={loginModal.isOpen}
       header={header}
       body={body}
       footer={footer}
@@ -141,4 +133,4 @@ const RegisterModal = () => {
   );
 };
 
-export default RegisterModal;
+export default LoginModal;

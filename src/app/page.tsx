@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import LoginModals from './components/modals/RegisterModal'
 
 export default function Home() {
   return (

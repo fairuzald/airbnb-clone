@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-
 import ReactDOM from "react-dom";
 
 interface ModalProps {
@@ -9,16 +8,21 @@ interface ModalProps {
   footer?: React.ReactNode;
   header?: React.ReactNode;
 }
+
 const Modals: React.FC<ModalProps> = ({ isOpen, body, footer, header }) => {
+  // State to track if the component is mounted
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Set the mounted state to true when the component mounts
     setMounted(true);
   }, []);
 
   if (!mounted) {
+    // If the component is not mounted yet, return null
     return null;
   }
+
   return (
     <>
       {typeof document !== "undefined" && (
@@ -36,7 +40,7 @@ const Modals: React.FC<ModalProps> = ({ isOpen, body, footer, header }) => {
                 {/* Main content */}
                 {header}
                 <div className="flex w-full  p-6 flex-col gap-8 sm:w-full">
-                  {/* content */}
+                  {/* Content */}
                   {body}
                   {footer}
                 </div>
@@ -54,4 +58,5 @@ const Modals: React.FC<ModalProps> = ({ isOpen, body, footer, header }) => {
     </>
   );
 };
+
 export default Modals;

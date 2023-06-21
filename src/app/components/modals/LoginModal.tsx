@@ -19,6 +19,7 @@ const LoginModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  // React Hook Form setup
   const {
     register,
     handleSubmit,
@@ -26,8 +27,12 @@ const LoginModal = () => {
   } = useForm<FieldValues>({
     defaultValues: { name: "", email: "", password: "" },
   });
+
+  // Register and login modal hooks
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
+
+  // Submit form handler
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
     signIn("credentials", { ...data, redirect: false }).then((callback) => {
@@ -42,13 +47,19 @@ const LoginModal = () => {
       }
     });
   };
+
+  // Toggle between login and register modals
   const onToggle = useCallback(() => {
     loginModal.onClose();
     registerModal.onOpen();
   }, [registerModal, loginModal]);
+
+  // Close login modal
   const onClose = useCallback(() => {
     loginModal.onClose();
   }, [loginModal]);
+
+  // Header component
   const header = (
     <div className="flex w-full items-center px-5 border-b border-b-bnb-border pb-3">
       <button
@@ -62,6 +73,8 @@ const LoginModal = () => {
       </p>
     </div>
   );
+
+  // Body component
   const body = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-3">

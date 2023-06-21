@@ -8,18 +8,27 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 import { signOut } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { SafeUser } from "@/app/types";
+
+// Define the props for the UserMenu component
 interface UserMenuProps {
   currentUser?: SafeUser | null;
 }
 
+// UserMenu component definition
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+  // Initialize the register and login modals
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
+  
+  // Set up state for menu toggle
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Define the toggleMenu function to toggle the menu state
   const toggleMenu = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
 
+  // Define the menu items based on whether there is a currentUser or not
   const dataMenu = !currentUser
     ? [
         { label: "Sign in", onClick: registerModal.onOpen },
@@ -39,6 +48,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           },
         },
       ];
+
+  // Render the UserMenu component
   return (
     <>
       <div className="relative flex gap-4 bg-transparent w-auto items-center justify-center">

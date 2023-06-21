@@ -4,24 +4,28 @@ import bcrypt from "bcrypt";
 import prisma from "@/app/libs/prismadb";
 
 export async function POST(
-  request: Request, 
+  request: Request,
 ) {
+  // Parse the JSON body of the request
   const body = await request.json();
-  const { 
+  const {
     email,
     name,
     password,
-   } = body;
+  } = body;
 
-   const hashedPassword = await bcrypt.hash(password, 12);
+  // Hash the password using bcrypt with a cost factor of 12
+  const hashedPassword = await bcrypt.hash(password, 12);
 
-   const user = await prisma.user.create({
+  // Create a new user in the Prisma database
+  const user = await prisma.user.create({
     data: {
       email,
       name,
       hashedPassword,
-    }
+    },
   });
 
+  // Return the user information as a JSON response
   return NextResponse.json(user);
 }

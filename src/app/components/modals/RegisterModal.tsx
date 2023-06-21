@@ -14,11 +14,13 @@ import GithubIcon from "../icons/GithubIcon";
 import { signIn } from "next-auth/react";
 
 const RegisterModal = () => {
+  // State variables to track form inputs and loading state
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // React Hook Form initialization
   const {
     register,
     handleSubmit,
@@ -26,8 +28,12 @@ const RegisterModal = () => {
   } = useForm<FieldValues>({
     defaultValues: { name: "", email: "", password: "" },
   });
+
+  // Initialize register and login modals
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
+
+  // Form submission handler
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
     axios
@@ -39,13 +45,19 @@ const RegisterModal = () => {
       .catch((err) => toast.error("Failed register your data"))
       .finally(() => setIsLoading(false));
   };
+
+  // Toggle between register and login modals
   const onToggle = useCallback(() => {
     registerModal.onClose();
     loginModal.onOpen();
   }, [registerModal, loginModal]);
+
+  // Close register modal
   const onClose = useCallback(() => {
     registerModal.onClose();
   }, [registerModal]);
+
+  // Header component for the modal
   const header = (
     <div className="flex w-full items-center px-5 border-b border-b-bnb-border pb-3">
       <button
@@ -59,6 +71,8 @@ const RegisterModal = () => {
       </p>
     </div>
   );
+
+  // Body component for the modal
   const body = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-3">
@@ -109,19 +123,13 @@ const RegisterModal = () => {
       </div>
       <div className="flex flex-col gap-3">
         <Button color="white">
-          <button
-            className="flex gap-7 items-center justify-center"
-            onClick={() => signIn("google")}
-          >
+          <button className="flex gap-7 items-center justify-center"  onClick={() => signIn("google")}>
             <GoogleIcon style="w-5 h-5" />
             <p>Continue with Google</p>
           </button>
         </Button>
-        <Button color="white">
-          <button
-            className="flex gap-7 items-center justify-center"
-            onClick={() => signIn("github")}
-          >
+        <Button color="white" >
+          <button className="flex gap-7 items-center justify-center" onClick={() => signIn("github")}>
             <GithubIcon style="w-5 h-5" />
             <p>Continue with Github</p>
           </button>
@@ -129,6 +137,8 @@ const RegisterModal = () => {
       </div>
     </div>
   );
+
+  // Footer component for the modal
   const footer = (
     <div className="flex gap-2 w-full text-black justify-center">
       <p>Already have an account?</p>

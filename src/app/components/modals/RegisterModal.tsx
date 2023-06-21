@@ -10,8 +10,9 @@ import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import GoogleIcon from "../icons/GoogleIcon";
 import { toast } from "react-hot-toast";
+import GithubIcon from "../icons/GithubIcon";
+import { signIn } from "next-auth/react";
 
-import DiscordIcon from "../icons/DiscordIcon";
 const RegisterModal = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -108,16 +109,22 @@ const RegisterModal = () => {
       </div>
       <div className="flex flex-col gap-3">
         <Button color="white">
-          <div className="flex gap-7 items-center justify-center">
+          <button
+            className="flex gap-7 items-center justify-center"
+            onClick={() => signIn("google")}
+          >
             <GoogleIcon style="w-5 h-5" />
             <p>Continue with Google</p>
-          </div>
+          </button>
         </Button>
         <Button color="white">
-          <div className="flex gap-7 items-center justify-center">
-            <DiscordIcon style="w-5 h-5" />
-            <p>Continue with Discord</p>
-          </div>
+          <button
+            className="flex gap-7 items-center justify-center"
+            onClick={() => signIn("github")}
+          >
+            <GithubIcon style="w-5 h-5" />
+            <p>Continue with Github</p>
+          </button>
         </Button>
       </div>
     </div>

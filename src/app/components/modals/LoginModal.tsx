@@ -9,9 +9,10 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import GoogleIcon from "../icons/GoogleIcon";
-import DiscordIcon from "../icons/DiscordIcon";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import GithubIcon from "../icons/GithubIcon";
+
 const LoginModal = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -99,17 +100,23 @@ const LoginModal = () => {
         <hr className="w-1/3 fill-black h-1 border-zinc-400" />
       </div>
       <div className="flex flex-col gap-3">
-        <Button color="white">
-          <div className="flex gap-7 items-center justify-center">
+      <Button color="white">
+          <button
+            className="flex gap-7 items-center justify-center"
+            onClick={() => signIn("google")}
+          >
             <GoogleIcon style="w-5 h-5" />
             <p>Continue with Google</p>
-          </div>
+          </button>
         </Button>
         <Button color="white">
-          <div className="flex gap-7 items-center justify-center">
-            <DiscordIcon style="w-5 h-5" />
-            <p>Continue with Discord</p>
-          </div>
+          <button
+            className="flex gap-7 items-center justify-center"
+            onClick={() => signIn("github")}
+          >
+            <GithubIcon style="w-5 h-5" />
+            <p>Continue with Github</p>
+          </button>
         </Button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client";
-
-import { IconProps } from "@/app/types/icon";
-
+interface IconProps{
+  style?: string;
+}
 const GoogleIcon: React.FC<IconProps> = ({ style }) => {
   return (
     <svg

@@ -25,7 +25,7 @@ const LoginModal = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FieldValues>({
-    defaultValues: { name: "", email: "", password: "" },
+    defaultValues: { email: "", password: "" },
   });
 
   // Register and login modal hooks
@@ -113,7 +113,7 @@ const LoginModal = () => {
         <hr className="w-1/3 fill-black h-1 border-zinc-400" />
       </div>
       <div className="flex flex-col gap-3">
-      <Button color="white">
+        <Button color="white">
           <button
             className="flex gap-7 items-center justify-center"
             onClick={() => signIn("google")}

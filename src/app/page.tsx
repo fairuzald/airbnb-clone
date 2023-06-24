@@ -1,10 +1,10 @@
-import Image from 'next/image'
-import LoginModals from './components/modals/RegisterModal'
+import Image from "next/image";
+import LoginModals from "./components/modals/RegisterModal";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       Test
     </main>
-  )
+  );
 }

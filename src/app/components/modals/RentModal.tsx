@@ -11,6 +11,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import CountrySelect from "../steps/CountrySelect";
 import dynamic from "next/dynamic";
 import Counter from "../steps/Counter";
+import ImageUpload from "../steps/ImageUpload";
 export enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
@@ -49,6 +50,7 @@ const RentModal = () => {
   const guestCount = watch("guestCount");
   const roomCount = watch("roomCount");
   const bathroomCount = watch("bathroomCount");
+  const imageSrc = watch("imageSrc");
 
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
@@ -188,10 +190,17 @@ const RentModal = () => {
       ),
     },
     [STEPS.IMAGES]: {
-      title: "Step 4",
-      subtitle: "Image Upload",
+      title: "Add a photo of your place",
+      subtitle: "Show guests what your place looks like!",
       content: (
-        <div className="text-black">Your images step content goes here</div>
+        <div className="flex flex-col items-center w-full justify-center">
+          <ImageUpload
+            url={imageSrc}
+            onChange={(url) => {
+              setCustomValue("imageSrc", url);
+            }}
+          />
+        </div>
       ),
     },
     [STEPS.DESCRIPTION]: {

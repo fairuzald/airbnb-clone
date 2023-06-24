@@ -6,8 +6,10 @@ import CrossIcon from "../icons/CrossIcon";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useRentModal from "@/app/hooks/useRentModal";
 import { categories } from "../navbar/Categories";
-import CategoryInput from "../navbar/CategoryInput";
+import CategoryInput from "../steps/CategoryInput";
 import { FieldValues, useForm } from "react-hook-form";
+import CountrySelect from "../steps/CountrySelect";
+import dynamic from "next/dynamic";
 export enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
@@ -20,6 +22,7 @@ const RentModal = () => {
   const registerModal = useRegisterModal();
   const loginModal = useRegisterModal();
   const rentModal = useRentModal();
+
   const {
     register,
     handleSubmit,
@@ -41,6 +44,8 @@ const RentModal = () => {
     },
   });
   const category = watch("category");
+  const location = watch("location");
+
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
       shouldValidate: true,
@@ -90,6 +95,13 @@ const RentModal = () => {
       </div>
     );
   }, [step]);
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("../steps/Map"), {
+        ssr: false,
+      }),
+    [location]
+  );
 
   const bodyContent: {
     [key in STEPS]: {
@@ -124,10 +136,18 @@ const RentModal = () => {
       ),
     },
     [STEPS.LOCATION]: {
-      title: "Step 2",
-      subtitle: "Location Selection",
+      title: "Where is your place located?",
+      subtitle: "Help guests find you",
       content: (
-        <div className="text-black">Your location step content goes here</div>
+        <div className="relative flex flex-col items-center w-full justify-center">
+          <CountrySelect
+            value={location}
+            onChange={(selectedLocation) => {
+              setCustomValue("location", selectedLocation);
+            }}
+          />
+          <Map center={location?.latlng} />
+        </div>
       ),
     },
     [STEPS.INFO]: {
@@ -177,8 +197,8 @@ const RentModal = () => {
 
   // Body component for the modal
   const body = (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-5 w-full">
+      <div className="flex flex-col gap-3 w-full">
         <h4 className="text-xl font-bold text-black">
           {bodyContent[step].title}
         </h4>

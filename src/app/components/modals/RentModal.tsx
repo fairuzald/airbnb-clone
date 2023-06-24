@@ -10,6 +10,7 @@ import CategoryInput from "../steps/CategoryInput";
 import { FieldValues, useForm } from "react-hook-form";
 import CountrySelect from "../steps/CountrySelect";
 import dynamic from "next/dynamic";
+import Counter from "../steps/Counter";
 export enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
@@ -45,6 +46,9 @@ const RentModal = () => {
   });
   const category = watch("category");
   const location = watch("location");
+  const guestCount = watch("guestCount");
+  const roomCount = watch("roomCount");
+  const bathroomCount = watch("bathroomCount");
 
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
@@ -151,10 +155,36 @@ const RentModal = () => {
       ),
     },
     [STEPS.INFO]: {
-      title: "Step 3",
-      subtitle: "Information",
+      title: "Share basics about your place",
+      subtitle: "What amenities do you have?",
       content: (
-        <div className="text-black">Your info step content goes here</div>
+        <div className="flex flex-col items-center w-full justify-center">
+          <Counter
+            title="Guests"
+            subtitle="How many guests do you allow?"
+            value={guestCount}
+            onChange={(value) => {
+              setCustomValue("guestCount", value);
+            }}
+          />
+          <Counter
+            title="Rooms"
+            subtitle="How many rooms do you have?"
+            value={roomCount}
+            onChange={(value) => {
+              setCustomValue("roomCount", value);
+            }}
+          />
+          <Counter
+            title="Bathrooms"
+            subtitle="How many bathrooms do you have?"
+            value={bathroomCount}
+            onChange={(value) => {
+              setCustomValue("bathroomCount", value);
+            }}
+            lastItem
+          />
+        </div>
       ),
     },
     [STEPS.IMAGES]: {

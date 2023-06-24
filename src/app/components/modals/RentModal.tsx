@@ -12,6 +12,7 @@ import CountrySelect from "../steps/CountrySelect";
 import dynamic from "next/dynamic";
 import Counter from "../steps/Counter";
 import ImageUpload from "../steps/ImageUpload";
+import TextFields from "../TextFields";
 export enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
@@ -51,6 +52,8 @@ const RentModal = () => {
   const roomCount = watch("roomCount");
   const bathroomCount = watch("bathroomCount");
   const imageSrc = watch("imageSrc");
+  const title = watch("title");
+  const description = watch("description");
 
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
@@ -204,11 +207,29 @@ const RentModal = () => {
       ),
     },
     [STEPS.DESCRIPTION]: {
-      title: "Step 5",
-      subtitle: "Description",
+      title: "How would you describe your place?",
+      subtitle: "Short and sweet works best!",
       content: (
-        <div className="text-black">
-          Your description step content goes here
+        <div className="flex flex-col items-center gap-3 w-full justify-center">
+          <TextFields
+            value={title}
+            onChange={(e) => setCustomValue("title", e)}
+            id="title"
+            label="Title"
+            errors={errors}
+            register={register}
+            required
+          />
+          <TextFields
+            textarea
+            value={description}
+            onChange={(e) => setCustomValue("description", e)}
+            id="description"
+            label="Desriptions"
+            errors={errors}
+            register={register}
+            required
+          />
         </div>
       ),
     },

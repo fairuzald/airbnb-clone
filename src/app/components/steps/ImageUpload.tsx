@@ -6,7 +6,7 @@ import Image from "next/image";
 declare global {
   var cloudinary: any;
 }
-const uploadPreset = "mhqmqiyr"
+const uploadPreset = "mhqmqiyr";
 const ImageUpload = ({
   url,
   onChange,
@@ -32,7 +32,7 @@ const ImageUpload = ({
           open?.();
         }
         return (
-            <button
+          <button
             className="relative w-full flex flex-col h-[300px] border-dashed border-gray-800 border-2 hover:opacity-70 transition p-10 gap-4 text-gray-800 rounded-md items-center justify-center"
             onClick={handleOnClick}
           >

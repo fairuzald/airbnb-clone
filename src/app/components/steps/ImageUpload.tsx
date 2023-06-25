@@ -6,7 +6,6 @@ import Image from "next/image";
 declare global {
   var cloudinary: any;
 }
-const uploadPreset = "mhqmqiyr";
 const ImageUpload = ({
   url,
   onChange,
@@ -22,7 +21,7 @@ const ImageUpload = ({
   );
   return (
     <CldUploadWidget
-      uploadPreset={uploadPreset}
+      uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
       onUpload={handleUpload}
       options={{ maxFiles: 1 }}
     >

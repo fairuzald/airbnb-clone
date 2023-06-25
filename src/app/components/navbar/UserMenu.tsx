@@ -74,7 +74,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           <Avatar image={currentUser?.image} />
         </button>
         {isOpen && (
-          <div className="flex flex-col py-2 absolute top-[60px] w-[40vw] md:w-[200px] shadow-md bg-white rounded-lg right-2 z-10">
+          <div className="flex flex-col py-2 absolute top-[60px] w-[40vw] md:w-[200px] shadow-md bg-white rounded-lg right-2 z-[999999]">
             {dataMenu.map((menu, index) => (
               <MenuItem label={menu.label} onClick={menu.onClick} key={index} />
             ))}

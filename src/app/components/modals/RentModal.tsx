@@ -3,16 +3,19 @@ import React, { useCallback, useMemo, useState } from "react";
 import Modals from "./Modals";
 import Button from "../Button";
 import CrossIcon from "../icons/CrossIcon";
-import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useRentModal from "@/app/hooks/useRentModal";
 import { categories } from "../navbar/Categories";
 import CategoryInput from "../steps/CategoryInput";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import CountrySelect from "../steps/CountrySelect";
 import dynamic from "next/dynamic";
 import Counter from "../steps/Counter";
 import ImageUpload from "../steps/ImageUpload";
 import TextFields from "../TextFields";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 export enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
@@ -21,11 +24,11 @@ export enum STEPS {
   DESCRIPTION = 4,
   PRICE = 5,
 }
+
 const RentModal = () => {
-  const registerModal = useRegisterModal();
-  const loginModal = useRegisterModal();
   const rentModal = useRentModal();
 
+  // Form state and methods
   const {
     register,
     handleSubmit,
@@ -46,6 +49,8 @@ const RentModal = () => {
       description: "",
     },
   });
+
+  // Watch form fields
   const category = watch("category");
   const location = watch("location");
   const guestCount = watch("guestCount");
@@ -54,7 +59,9 @@ const RentModal = () => {
   const imageSrc = watch("imageSrc");
   const title = watch("title");
   const description = watch("description");
+  const price = watch("price");
 
+  // Set custom form field value
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
       shouldValidate: true,
@@ -62,10 +69,19 @@ const RentModal = () => {
       shouldTouch: true,
     });
   };
+
+  // Step state
   const [step, setStep] = useState(STEPS.CATEGORY);
-  const Next = () => {
+
+  // Loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Go to the next step
+  const Next = useCallback(() => {
     setStep((value) => value + 1);
-  };
+  }, []);
+
+  // Go to the previous step
   const Prev = () => {
     setStep((value) => value - 1);
   };
@@ -75,35 +91,35 @@ const RentModal = () => {
     rentModal.onClose();
   }, [rentModal]);
 
-  const button = useMemo(() => {
-    if (step === STEPS.CATEGORY) {
-      return (
-        <Button color="red" onClick={Next}>
-          Next
-        </Button>
-      );
-    }
-    if (step === STEPS.PRICE) {
-      return (
-        <div className="flex items-center justify-center gap-2">
-          <Button color="white" onClick={Prev}>
-            Back
-          </Button>
-          <Button color="red">Create</Button>
-        </div>
-      );
-    }
-    return (
-      <div className="flex items-center justify-center gap-2">
-        <Button color="white" onClick={Prev}>
-          Back
-        </Button>
-        <Button color="red" onClick={Next}>
-          Next
-        </Button>
-      </div>
-    );
-  }, [step]);
+  // router
+  const router = useRouter();
+
+  // Submit form rent modal
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(
+    (data) => {
+      if (step !== STEPS.PRICE) {
+        return Next();
+      }
+
+      setIsLoading(true);
+      axios
+        .post("/api/listings", data)
+        .then(() => {
+          toast.success("Success created your rent data!");
+          router.refresh();
+          reset();
+          setStep(STEPS.CATEGORY);
+          rentModal.onClose();
+        })
+        .catch((err) => {
+          toast.error("Error creating rent");
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [step, Next, setIsLoading, router, reset, setStep, rentModal]
+  );
+
+  // Dynamically load the Map component
   const Map = useMemo(
     () =>
       dynamic(() => import("../steps/Map"), {
@@ -112,6 +128,7 @@ const RentModal = () => {
     [location]
   );
 
+  // Body content for each step
   const bodyContent: {
     [key in STEPS]: {
       title: string;
@@ -225,7 +242,7 @@ const RentModal = () => {
             value={description}
             onChange={(e) => setCustomValue("description", e)}
             id="description"
-            label="Desriptions"
+            label="Description"
             errors={errors}
             register={register}
             required
@@ -234,13 +251,47 @@ const RentModal = () => {
       ),
     },
     [STEPS.PRICE]: {
-      title: "Step 6",
-      subtitle: "Price Setting",
+      title: "Now, set your price",
+      subtitle: "How much do you charge per night?",
       content: (
-        <div className="text-black">Your price step content goes here</div>
+        <div className="flex flex-col items-center gap-3 w-full justify-center">
+          <TextFields
+            formatPrice
+            type="text"
+            value={price}
+            onChange={(e) => setCustomValue("price", e)}
+            label="Price"
+            id="price"
+            errors={errors}
+            register={register}
+            required
+          />
+        </div>
       ),
     },
   };
+
+  // Generate button based on the current step
+  const button = useMemo(() => {
+    if (step === STEPS.CATEGORY) {
+      return (
+        <Button color="red" onClick={handleSubmit(onSubmit)}>
+          Next
+        </Button>
+      );
+    }
+
+    return (
+      <div className="flex items-center justify-center gap-2">
+        <Button color="white" onClick={Prev}>
+          Back
+        </Button>
+        <Button color="red" onClick={handleSubmit(onSubmit)}>
+          {step === STEPS.PRICE ? "Create" : "Next"}
+        </Button>
+      </div>
+    );
+  }, [step, onSubmit, handleSubmit]);
 
   // Header component for the modal
   const header = (

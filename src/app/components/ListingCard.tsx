@@ -5,12 +5,16 @@ import Image from "next/image";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import useCountries from "../hooks/useCountries";
+import useFavorites from "../hooks/useFavorites";
 interface ListingCardProps {
   data: SafeListing;
   currentUser?: SafeUser | null;
 }
 const ListingCard: React.FC<ListingCardProps> = ({ data, currentUser }) => {
-  const hasFavorited = false;
+  const { hasFavorited, toggleFavorite } = useFavorites({
+    currentUser,
+    listingId: data.id,
+  });
   const router = useRouter();
   const { getByValue } = useCountries();
   const location = getByValue(data.locationValue);
@@ -20,18 +24,18 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, currentUser }) => {
       className="flex flex-col gap-0.5"
       onClick={() => router.push(`/listings/${data.id}`)}
     >
-      <div
-        className="w-[270px] z-20 relative aspect-square 
-            h-[270px] rounded-lg overflow-hidden mb-1"
-      >
+      <div className="w-[270px] relative aspect-square h-[270px] rounded-lg overflow-hidden mb-1">
         <Image
           src={data.imageSrc}
           alt={data.title}
           width={1920}
           height={1080}
-          className="hover:scale-110  object-center object-cover rounded-lg transition w-full h-full"
+          className="hover:scale-110 object-center object-cover rounded-lg transition w-full h-full"
         ></Image>
-        <button className="hover:opacity-80 transition ">
+        <button
+          className="hover:opacity-80 transition"
+          onClick={(e) => toggleFavorite(e)}
+        >
           <AiOutlineHeart
             size={28}
             className="fill-white absolute top-[15px] right-[15px]"
@@ -50,7 +54,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, currentUser }) => {
         {location?.region}, {location?.label}
       </h4>
       <p className="font-light text-neutral-500">{data.category}</p>
-      <p className="font-semibold">${data.price}</p>
+      <p className="font-semibold">${data.price}/night</p>
     </button>
   );
 };

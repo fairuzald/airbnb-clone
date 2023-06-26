@@ -111,7 +111,7 @@ const Categories = () => {
 
   // Render a list of CategoryBox components, passing the label, icon, and selected status
   return (
-    <div className="flex w-full items-center justify-center gap-5">
+    <div className="flex w-full items-center justify-center gap-5 overflow-x-auto scollbar-hidden scroll-pt-6">
       {categories.map((item) => (
         <CategoryBox
           key={item.label}

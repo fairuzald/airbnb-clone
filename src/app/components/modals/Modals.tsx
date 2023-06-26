@@ -34,7 +34,7 @@ const Modals: React.FC<ModalProps> = ({ isOpen, body, footer, header }) => {
                   isOpen
                     ? "opacity-100 -translate-y-1/2"
                     : "translate-y-0 pointer-events-none opacity-0"
-                } left-1/2 top-1/2 z-10 flex h-fit w-[90vw] translate
+                } left-1/2 top-1/2 z-50 flex h-fit w-[90vw] translate
                max-w-[320px] -translate-x-1/2 translate transform flex-col items-center justify-center  rounded-xl bg-white py-4 text-white transition duration-300  sm:w-[60vw] sm:max-w-[550px] sm:items-start`}
               >
                 {/* Main content */}
@@ -48,7 +48,7 @@ const Modals: React.FC<ModalProps> = ({ isOpen, body, footer, header }) => {
               <span
                 className={` ${
                   isOpen ? "opacity-100" : "pointer-events-none opacity-0"
-                } fixed inset-0 flex w-full bg-neutral-800/70 transition-opacity duration-300`}
+                } fixed z-[49] inset-0 flex w-full bg-neutral-800/70 transition-opacity duration-300`}
               ></span>
             </>,
             document.getElementById("portal") as HTMLElement

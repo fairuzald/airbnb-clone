@@ -54,7 +54,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, currentUser }) => {
         {location?.region}, {location?.label}
       </h4>
       <p className="font-light text-neutral-500">{data.category}</p>
-      <p className="font-semibold">${data.price}/night</p>
+      <p className="font-semibold">${data.price} / night</p>
     </button>
   );
 };

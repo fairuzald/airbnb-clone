@@ -5,7 +5,7 @@ import { categories } from "@/app/components/navbar/Categories";
 import useCountries from "@/app/hooks/useCountries";
 import useFavorites from "@/app/hooks/useFavorites";
 import useLoginModal from "@/app/hooks/useLoginModal";
-import { SafeListing, SafeUser } from "@/app/types";
+import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
 import { Reservation } from "@prisma/client";
 import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval } from "date-fns";
@@ -17,6 +17,7 @@ import { toast } from "react-hot-toast";
 import { IconType } from "react-icons";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import type { Range } from "react-date-range";
+import Button from "@/app/components/Button";
 const initialDateRange = {
   startDate: new Date(),
   endDate: new Date(),
@@ -25,11 +26,11 @@ const initialDateRange = {
 const ListClient = ({
   listing,
   currentUser,
-  reservations,
+  reservations=[],
 }: {
   listing: SafeListing & { user: SafeUser };
   currentUser?: SafeUser | null;
-  reservations?: Reservation[];
+  reservations?: SafeReservation[];
 }) => {
   // useCountries hook
   const { getByValue } = useCountries();
@@ -213,7 +214,9 @@ const ListClient = ({
             <div className="px-4 py-2 text-left flex items-end">
               <p className="text-black text-xl font-bold">
                 $ {listing?.price}{" "}
-                <span className="text-neutral-500 text-base font-light">/ night</span>
+                <span className="text-neutral-500 text-base font-light">
+                  / night
+                </span>
               </p>
             </div>
             <hr className="w-full border border-bnb-border" />
@@ -227,7 +230,11 @@ const ListClient = ({
               value={dateRange}
             />
             <hr className="w-full border border-bnb-border" />
-
+            <div className="w-full px-5 py-3">
+              <Button color="red" onClick={onReservationSubmit}>
+                Reserve
+              </Button>
+            </div>
             {/* Total price */}
             <div className="flex px-4 py-2 justify-between">
               <p className="text-black font-bold">Total</p>

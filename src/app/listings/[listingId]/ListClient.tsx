@@ -106,6 +106,7 @@ const ListClient = ({
         toast.success("Reservation succesfully created!");
         setDateRange(initialDateRange);
         router.refresh();
+        router.push("/trips")
       })
       .catch((error) => {
         toast.error("Failed to create reservation");

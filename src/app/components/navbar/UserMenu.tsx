@@ -9,6 +9,7 @@ import { signOut } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { SafeUser } from "@/app/types";
 import useRentModal from "@/app/hooks/useRentModal";
+import { useRouter } from "next/navigation";
 
 // Define the props for the UserMenu component
 interface UserMenuProps {
@@ -25,6 +26,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
   // Set up state for menu toggle
   const [isOpen, setIsOpen] = useState(false);
 
+  // Router to navigate on specific page
+  const router = useRouter();
   // Define the toggleMenu function to toggle the menu state
   const toggleMenu = useCallback(() => {
     setIsOpen((value) => !value);
@@ -37,7 +40,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
         { label: "Log in", onClick: loginModal.onOpen },
       ]
     : [
-        { label: "My Trips", onClick: () => {} },
+        { label: "My Trips", onClick: () => router.push("/trips") },
         { label: "My Favorites", onClick: () => {} },
         { label: "My Reservations", onClick: () => {} },
         { label: "My Properties", onClick: () => {} },
@@ -55,7 +58,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     if (!currentUser) {
       return registerModal.onOpen();
     }
-    return rentModal.onOpen()
+    return rentModal.onOpen();
   }, [currentUser, rentModal, registerModal]);
 
   // Render the UserMenu component

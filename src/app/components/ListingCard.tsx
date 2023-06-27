@@ -1,16 +1,25 @@
 "use client";
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { SafeListing, SafeReservation, SafeUser } from "../types";
 import Image from "next/image";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import useCountries from "../hooks/useCountries";
 import useFavorites from "../hooks/useFavorites";
+import { format } from "date-fns";
+import Button from "./Button";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 interface ListingCardProps {
   data: SafeListing;
   currentUser?: SafeUser | null;
+  reservation?: SafeReservation;
 }
-const ListingCard: React.FC<ListingCardProps> = ({ data, currentUser }) => {
+const ListingCard: React.FC<ListingCardProps> = ({
+  data,
+  currentUser,
+  reservation,
+}) => {
   const { hasFavorited, toggleFavorite } = useFavorites({
     currentUser,
     listingId: data.id,
@@ -18,6 +27,34 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, currentUser }) => {
   const router = useRouter();
   const { getByValue } = useCountries();
   const location = getByValue(data.locationValue);
+  const price = useMemo(() => {
+    if (reservation) {
+      return reservation.totalPrice;
+    }
+    return data.price;
+  }, [data.price, reservation]);
+  const reservationDate = useMemo(() => {
+    if (!reservation) {
+      return null;
+    }
+
+    const start = new Date(reservation.startDate);
+    const end = new Date(reservation.endDate);
+
+    return `${format(start, "PP")} - ${format(end, "PP")}`;
+  }, [reservation]);
+
+  const onCancelReservation = useCallback(() => {
+    axios
+      .delete(`/api/reservations/${""}`)
+      .then(() => {
+        toast.success("Reservation cancelled");
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.error);
+      });
+  }, [router]);
 
   return (
     <button
@@ -30,7 +67,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, currentUser }) => {
           alt={data.title}
           width={1920}
           height={1080}
-          className="hover:scale-110 object-center object-cover rounded-lg transition w-full h-full"
+          className="hover:scale-110 object-center object-cover rounded-lg transition overflow-hidden w-full h-full"
         ></Image>
         <button
           className="hover:opacity-80 transition"
@@ -53,8 +90,17 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, currentUser }) => {
       <h4 className="font-semibold text-lg">
         {location?.region}, {location?.label}
       </h4>
-      <p className="font-light text-neutral-500">{data.category}</p>
-      <p className="font-semibold">${data.price} / night</p>
+      <p className="font-light text-neutral-500">
+        {reservationDate || data.category}
+      </p>
+      <p className="font-semibold">
+        ${price} {!reservation && " / night"}
+      </p>
+      {reservation && (
+        <Button color="red" size="small" onClick={onCancelReservation}>
+          Cancel Reservation
+        </Button>
+      )}
     </button>
   );
 };

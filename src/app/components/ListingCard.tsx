@@ -14,11 +14,13 @@ interface ListingCardProps {
   data: SafeListing;
   currentUser?: SafeUser | null;
   reservation?: SafeReservation;
+  isProperties?: boolean;
 }
 const ListingCard: React.FC<ListingCardProps> = ({
   data,
   currentUser,
   reservation,
+  isProperties
 }) => {
   const { hasFavorited, toggleFavorite } = useFavorites({
     currentUser,
@@ -62,7 +64,23 @@ const ListingCard: React.FC<ListingCardProps> = ({
       .catch((err) => {
         toast.error(err?.response?.data?.error);
       });
-  }, [router]);
+  }, [router, reservation]);
+  const onCancelListing = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    axios
+      .delete(
+        `/api/listings/${
+        data.id
+        }`
+      )
+      .then(() => {
+        toast.success("Listing removed");
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.error);
+      });
+  }, [router, data.id]);
 
   return (
     <button
@@ -107,6 +125,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
       {reservation && (
         <Button color="red" size="small" onClick={(e: React.MouseEvent<HTMLButtonElement>)=>{onCancelReservation(e)}}>
           Cancel Reservation
+        </Button>
+      )}
+      {isProperties && (
+        <Button color="red" size="small" onClick={(e: React.MouseEvent<HTMLButtonElement>)=>{onCancelListing(e)}}>
+          Remove Listing
         </Button>
       )}
     </button>

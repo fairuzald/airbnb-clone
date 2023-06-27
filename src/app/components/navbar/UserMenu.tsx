@@ -46,7 +46,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           label: "My Reservations",
           onClick: () => router.push("/reservations"),
         },
-        { label: "My Properties", onClick: () => {} },
+        { label: "My Properties", onClick: () => router.push("/properties") },
         { label: "Airbnb My Home", onClick: () => {} },
         {
           label: "Logout",

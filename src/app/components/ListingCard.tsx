@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useMemo } from "react";
+import React, { MouseEventHandler, useCallback, useMemo } from "react";
 import { SafeListing, SafeReservation, SafeUser } from "../types";
 import Image from "next/image";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
@@ -44,9 +44,17 @@ const ListingCard: React.FC<ListingCardProps> = ({
     return `${format(start, "PP")} - ${format(end, "PP")}`;
   }, [reservation]);
 
-  const onCancelReservation = useCallback(() => {
+  const onCancelReservation = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    if(!reservation || !reservation.id){
+      return toast.error("Not found reservation ID")
+    }
     axios
-      .delete(`/api/reservations/${""}`)
+      .delete(
+        `/api/reservations/${
+        reservation.id
+        }`
+      )
       .then(() => {
         toast.success("Reservation cancelled");
         router.refresh();
@@ -97,7 +105,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
         ${price} {!reservation && " / night"}
       </p>
       {reservation && (
-        <Button color="red" size="small" onClick={onCancelReservation}>
+        <Button color="red" size="small" onClick={(e: React.MouseEvent<HTMLButtonElement>)=>{onCancelReservation(e)}}>
           Cancel Reservation
         </Button>
       )}

@@ -42,14 +42,17 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     : [
         { label: "My Trips", onClick: () => router.push("/trips") },
         { label: "My Favorites", onClick: () => {} },
-        { label: "My Reservations", onClick: () => {} },
+        {
+          label: "My Reservations",
+          onClick: () => router.push("/reservations"),
+        },
         { label: "My Properties", onClick: () => {} },
         { label: "Airbnb My Home", onClick: () => {} },
         {
           label: "Logout",
           onClick: () => {
-            toast.success("Logged out");
             signOut();
+            toast.success("Logged out");
           },
         },
       ];

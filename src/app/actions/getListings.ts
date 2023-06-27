@@ -12,7 +12,7 @@ export default async function getListings() {
     }));
 
     return safeListings;
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    throw new Error(err);
   }
 }

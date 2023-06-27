@@ -29,9 +29,8 @@ export default async function getListingById(params: {  listingId?: string;}) {
     };
 
     // Rest of your code goes here
-  } catch (err) {
-    console.log(err);
-    throw new Error("Something went wrong");
+  } catch (err:any) {
+    throw new Error(err);
     // Handle the error here
   }
 }

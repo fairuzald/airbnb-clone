@@ -4,7 +4,7 @@ import getReservations from "../actions/getReservations";
 import { notFound } from "next/navigation";
 import ReservationClient from "./ReservationClient";
 
-const TripsPage = async () => {
+const ReservationsPage = async () => {
   const currentUser = await getCurrentUser();
   const reservations = await getReservations({ authorId: currentUser?.id });
   if (!currentUser || reservations.length === 0) {
@@ -17,4 +17,4 @@ const TripsPage = async () => {
   );
 };
 
-export default TripsPage;
+export default ReservationsPage;

@@ -1,10 +1,12 @@
 import getCurrentUser from "./actions/getCurrentUser";
-import getListings from "./actions/getListings";
+import getListings, { IListingsParams } from "./actions/getListings";
 import EmptyState from "./components/EmptyState";
 import ListingCard from "./components/ListingCard";
-
-export default async function Home(params: { userId?: string}) {
-  const listings = await getListings(params);
+interface HomeProps {
+  searchParams: IListingsParams;
+}
+export default async function Home({ searchParams }: HomeProps) {
+  const listings = await getListings(searchParams);
   const currentUser = await getCurrentUser();
   if (!listings || listings.length <= 0) {
     return <EmptyState resetButton />;

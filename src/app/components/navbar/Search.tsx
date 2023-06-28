@@ -1,11 +1,16 @@
 "use client";
 import React from "react";
 import SearchIcon from "../icons/SearchIcon";
+import useSearchModal from "@/app/hooks/useSearchModal";
 
 const Search = () => {
+  const searchModal = useSearchModal();
   return (
     <div className="flex py-1 px-3 mx-auto rounded-full w-full md:w-auto border border-bnb-border shadow-sm hover:shadow-md transition cursor-pointer font-semibold">
-      <div className="flex items-center justify-center py-0.5">
+      <button
+        onClick={searchModal.onOpen}
+        className="flex items-center justify-center py-0.5"
+      >
         <div className="flex border-r px-4">
           <p className="text-black">Every where</p>
         </div>
@@ -18,7 +23,7 @@ const Search = () => {
             <SearchIcon style="fill-white w-4 h-4" />
           </button>
         </div>
-      </div>
+      </button>
     </div>
   );
 };

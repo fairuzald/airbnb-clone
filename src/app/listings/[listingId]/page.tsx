@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import React from "react";
 import ListClient from "./ListClient";
 import getReservations from "@/app/actions/getReservations";
+export const dynamic = 'force-dynamic'
 
 const ListingDetail = async ({
   params,

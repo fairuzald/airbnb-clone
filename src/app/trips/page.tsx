@@ -3,6 +3,7 @@ import getCurrentUser from "../actions/getCurrentUser";
 import getReservations from "../actions/getReservations";
 import { notFound } from "next/navigation";
 import TripClient from "./TripClient";
+export const dynamic = 'force-dynamic'
 
 const TripsPage = async () => {
   const currentUser = await getCurrentUser();

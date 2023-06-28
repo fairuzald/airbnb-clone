@@ -3,6 +3,7 @@ import getCurrentUser from "../actions/getCurrentUser";
 import { notFound } from "next/navigation";
 import PropertiesClient from "./PropertiesClient";
 import getListings from "../actions/getListings";
+export const dynamic = 'force-dynamic'
 
 const FavoritesPage = async () => {
   const currentUser = await getCurrentUser();

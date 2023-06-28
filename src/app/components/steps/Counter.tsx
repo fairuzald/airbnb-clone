@@ -39,7 +39,7 @@ const Counter = ({
         }`}
       >
         <button
-          disabled={value <= 0}
+          disabled={value <= 1}
           onClick={onReduce}
           className="w-10 disabled:cursor-not-allowed h-10 rounded-full border border-neutral-600 flex items-center justify-center text-neutral-600 hover:opacity-80 transition"
         >

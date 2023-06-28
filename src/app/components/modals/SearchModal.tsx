@@ -1,18 +1,12 @@
 "use client";
 import React, { useCallback, useMemo, useState } from "react";
-import { signIn } from "next-auth/react";
 import Modals from "./Modals";
 import CrossIcon from "../icons/CrossIcon";
-import TextFields from "../TextFields";
 import Button from "../Button";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import useRegisterModal from "@/app/hooks/useRegisterModal";
-import GoogleIcon from "../icons/GoogleIcon";
 import { useParams, useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
-import GithubIcon from "../icons/GithubIcon";
 import useSearchModal from "@/app/hooks/useSearchModal";
-import { DateRange, Range } from "react-date-range";
+import { Range } from "react-date-range";
 import dynamic from "next/dynamic";
 import CountrySelect, { CountrySelectValue } from "../steps/CountrySelect";
 import qs from "query-string";
@@ -40,15 +34,6 @@ const SearchModal = () => {
     endDate: new Date(),
     key: "selection",
   });
-  // React Hook Form setup
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FieldValues>({
-    defaultValues: { email: "", password: "" },
-  });
-
   const Map = useMemo(
     () => dynamic(() => import("../steps/Map"), { ssr: false }),
     [location]
@@ -168,7 +153,6 @@ const SearchModal = () => {
             subtitle="How many bathrooms do you need?"
             onChange={(value) => setbathroomCount(value)}
           />
-         
         </div>
       ),
     },

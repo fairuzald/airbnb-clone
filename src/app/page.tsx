@@ -8,7 +8,7 @@ interface HomeProps {
 
 const Home = async ({ searchParams }: HomeProps) => {
   const listings = await getListings(searchParams);
-  const currentUser = await getCurrentUser();
+  // const currentUser = await getCurrentUser();
 
   if (!listings || listings.length <= 0) {
     return <EmptyState resetButton />;

@@ -18,11 +18,11 @@ const Search = () => {
     const start = new Date(startDate as string);
     const end = new Date(endDate as string);
     const diff = differenceInDays(end, start);
+    if (!startDate && !endDate) {
+      return "Any Weeks";
+    }
     if (diff === 0 || diff === 1) {
       return `1 day`;
-    }
-    if (!diff) {
-      return "Any Weeks";
     }
     return `${diff} days`;
   }, [startDate, endDate]);
